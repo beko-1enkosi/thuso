@@ -9,7 +9,7 @@ from pydantic import BaseModel
 app = FastAPI(
     title="Thuso API",
     description="Job opportunity verification and interview safety API",
-    version="0.1.0",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -44,6 +44,14 @@ SUSPICIOUS_TLDS = {
     ".online",
 }
 
+URL_SHORTENERS = {
+    "bit.ly",
+    "tinyurl.com",
+    "t.co",
+    "cutt.ly",
+    "shorturl.at",
+}
+
 RISK_PATTERNS = [
     {
         "pattern": r"\b(registration|application|processing|admin)\s+fee\b",
@@ -75,12 +83,35 @@ RISK_PATTERNS = [
         "message": "The message uses urgency or pressure tactics.",
         "weight": 10,
     },
+    {
+        "pattern": r"\bcome\s+alone\b|\bdo\s+not\s+bring\s+(anyone|someone)\b",
+        "message": "The message tells the job seeker to attend alone.",
+        "weight": 25,
+    },
+    {
+        "pattern": r"\bbring\b.{0,20}\bcash\b|\bcash\s+(only|required)\b",
+        "message": "The recruiter asks the job seeker to bring cash.",
+        "weight": 25,
+    },
+    {
+        "pattern": (
+            r"\b(meet|interview)\b.{0,45}"
+            r"\b(hotel|guest\s*house|private\s+house|residence|apartment|flat)\b"
+        ),
+        "message": "The interview appears to be arranged at a private or unusual venue.",
+        "weight": 20,
+    },
+    {
+        "pattern": r"\b(location|address)\b.{0,30}\b(sent|shared|given)\b.{0,20}\b(later|after)\b",
+        "message": "The interview location is being withheld until later.",
+        "weight": 15,
+    },
 ]
 
 
 def extract_urls(text: str) -> list[str]:
     urls = re.findall(r"https?://[^\s]+", text, flags=re.IGNORECASE)
-    return [url.rstrip(".,);]") for url in urls]
+    return [url.rstrip(".,);]}'\">\"") for url in urls]
 
 
 def extract_emails(text: str) -> list[str]:
@@ -99,11 +130,22 @@ def extract_phone_numbers(text: str) -> list[str]:
     return list(dict.fromkeys(matches))
 
 
+def normalise_url(url: str) -> str:
+    cleaned = url.strip()
+
+    if not cleaned:
+        return cleaned
+
+    if not re.match(r"^[a-z][a-z0-9+.-]*://", cleaned, flags=re.IGNORECASE):
+        cleaned = f"https://{cleaned}"
+
+    return cleaned
+
+
 def get_domain(url: str) -> str | None:
     try:
-        parsed = urlparse(url)
-
-        domain = parsed.netloc.lower()
+        parsed = urlparse(normalise_url(url))
+        domain = parsed.netloc.lower().split("@")[ -1].split(":")[0]
 
         if domain.startswith("www."):
             domain = domain[4:]
@@ -112,6 +154,36 @@ def get_domain(url: str) -> str | None:
 
     except ValueError:
         return None
+
+
+def build_recommendations(risk_level: str, warnings: list[str]) -> list[str]:
+    recommendations = [
+        "Confirm the company and vacancy through an official website or independently found contact number.",
+        "Do not share passwords, PINs, one-time passwords or online-banking credentials.",
+    ]
+
+    if risk_level == "high":
+        recommendations.insert(
+            0,
+            "Pause before travelling or paying anything and independently verify the opportunity first.",
+        )
+    elif risk_level == "medium":
+        recommendations.insert(
+            0,
+            "Verify the warning signals before attending the interview or sending sensitive documents.",
+        )
+    else:
+        recommendations.insert(
+            0,
+            "No major warning signals were found, but continue with normal job-search safety checks.",
+        )
+
+    if any("alone" in warning.lower() or "venue" in warning.lower() for warning in warnings):
+        recommendations.append(
+            "Share the interview address and expected check-in time with someone you trust before travelling."
+        )
+
+    return recommendations
 
 
 def analyse_job(text: str, supplied_url: str | None = None):
@@ -129,8 +201,8 @@ def analyse_job(text: str, supplied_url: str | None = None):
     phone_numbers = extract_phone_numbers(text)
     urls = extract_urls(text)
 
-    if supplied_url:
-        urls.append(supplied_url)
+    if supplied_url and supplied_url.strip():
+        urls.append(supplied_url.strip())
 
     urls = list(dict.fromkeys(urls))
 
@@ -138,9 +210,7 @@ def analyse_job(text: str, supplied_url: str | None = None):
         email_domain = email.split("@")[-1].lower()
 
         if email_domain in FREE_EMAIL_DOMAINS:
-            warnings.append(
-                f"Recruiter uses a public email address: {email}"
-            )
+            warnings.append(f"Recruiter uses a public email address: {email}")
             risk_score += 15
 
     domains = []
@@ -158,6 +228,13 @@ def analyse_job(text: str, supplied_url: str | None = None):
                 )
                 risk_score += 15
 
+            if domain in URL_SHORTENERS:
+                warnings.append(
+                    f"The link uses the URL shortener '{domain}', which hides the final destination."
+                )
+                risk_score += 10
+
+    warnings = list(dict.fromkeys(warnings))
     risk_score = min(risk_score, 100)
 
     if risk_score >= 60:
@@ -170,7 +247,8 @@ def analyse_job(text: str, supplied_url: str | None = None):
     return {
         "risk_score": risk_score,
         "risk_level": risk_level,
-        "warnings": list(dict.fromkeys(warnings)),
+        "warnings": warnings,
+        "recommendations": build_recommendations(risk_level, warnings),
         "extracted": {
             "emails": emails,
             "phone_numbers": phone_numbers,

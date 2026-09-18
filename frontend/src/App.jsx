@@ -1,33 +1,35 @@
 import { useState } from "react";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import AssistantLauncher from "./components/AssistantLauncher";
+import PlaceholderPage from "./components/PlaceholderPage";
+import "./home.css";
+import AppointmentsPage from "./components/appointments/AppointmentsPage";
+import useAppointments from "./components/appointments/useAppointments";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 const demoScam = `Congratulations! You have been selected for an interview.
 
 Pay a R350 registration fee before attending.
 WhatsApp only.
+Come alone and bring cash.
 
 Send your CV to thusojobs@gmail.com.
 
 Visit https://thuso-careers.xyz/apply immediately.`;
 
 function App() {
-  const [activePage, setActivePage] = useState("verify");
+  const appointments = useAppointments();
+  const [appointmentDraft, setAppointmentDraft] = useState(null);
+
+  const [activePage, setActivePage] = useState("dashboard");
 
   const [jobText, setJobText] = useState("");
   const [jobUrl, setJobUrl] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const [interview, setInterview] = useState({
-    company: "",
-    location: "",
-    date: "",
-    time: "",
-    contactName: "",
-    contactPhone: "",
-  });
-
-  const [journeyStatus, setJourneyStatus] = useState("not-started");
 
   async function verifyOpportunity() {
     if (!jobText.trim() && !jobUrl.trim()) {
@@ -40,7 +42,7 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/verify", {
+      const response = await fetch(`${API_URL}/api/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +59,7 @@ function App() {
 
       const data = await response.json();
       setResult(data);
-    } catch (err) {
+    } catch {
       setError(
         "Could not reach the Thuso API. Make sure FastAPI is still running."
       );
@@ -74,138 +76,23 @@ function App() {
   }
 
   function moveToInterview() {
-    setActivePage("journey");
-
-    if (result?.extracted?.domains?.length) {
-      setInterview((current) => ({
-        ...current,
-        company: result.extracted.domains[0],
-      }));
-    }
+    setAppointmentDraft({ company: result?.extracted?.domains?.[0] || '' });
+    navigate("appointments");
   }
 
-  function startJourney() {
-    setJourneyStatus("travelling");
-  }
-
-  function markArrived() {
-    setJourneyStatus("arrived");
-  }
-
-  function markSafe() {
-    setJourneyStatus("safe");
-  }
-
-  function triggerAlert() {
-    setJourneyStatus("alert");
+  function navigate(page) {
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: "instant" });
+    requestAnimationFrame(() => document.getElementById("main-content")?.focus({ preventScroll: true }));
   }
 
   return (
-    <div className="app">
-      <header className="topbar">
-        <div className="brand" onClick={() => setActivePage("dashboard")}>
-          <div className="brand-mark">T</div>
-
-          <div>
-            <h1>Thuso</h1>
-            <p>Verify. Prepare. Arrive safely.</p>
-          </div>
-        </div>
-
-        <nav>
-          <button
-            className={activePage === "dashboard" ? "nav-active" : ""}
-            onClick={() => setActivePage("dashboard")}
-          >
-            Dashboard
-          </button>
-
-          <button
-            className={activePage === "verify" ? "nav-active" : ""}
-            onClick={() => setActivePage("verify")}
-          >
-            Verify
-          </button>
-
-          <button
-            className={activePage === "journey" ? "nav-active" : ""}
-            onClick={() => setActivePage("journey")}
-          >
-            Safe Journey
-          </button>
-        </nav>
-      </header>
-
-      <main className="page">
-        {activePage === "dashboard" && (
-          <section>
-            <div className="hero compact-hero">
-              <div>
-                <span className="eyebrow">JOB SEEKER SAFETY</span>
-                <h2>Good morning.</h2>
-                <p>
-                  Check an opportunity before you trust it, then use Thuso to
-                  stay connected during your interview journey.
-                </p>
-              </div>
-
-              <button
-                className="primary-button"
-                onClick={() => setActivePage("verify")}
-              >
-                Verify an opportunity
-              </button>
-            </div>
-
-            <div className="dashboard-grid">
-              <article className="card">
-                <span className="card-label">NEXT INTERVIEW</span>
-                <h3>No interview scheduled</h3>
-                <p>
-                  Verify an opportunity first, then add it to your Safe Journey.
-                </p>
-
-                <button
-                  className="text-button"
-                  onClick={() => setActivePage("verify")}
-                >
-                  Start verification →
-                </button>
-              </article>
-
-              <article className="card">
-                <span className="card-label">HOW THUSO HELPS</span>
-
-                <div className="mini-step">
-                  <strong>01</strong>
-                  <span>Analyse suspicious job messages</span>
-                </div>
-
-                <div className="mini-step">
-                  <strong>02</strong>
-                  <span>Explain the warning signals</span>
-                </div>
-
-                <div className="mini-step">
-                  <strong>03</strong>
-                  <span>Stay connected during interviews</span>
-                </div>
-              </article>
-
-              <article className="card wide-card">
-                <span className="card-label">THE THUSO PROMISE</span>
-
-                <h3>We give you evidence — not false certainty.</h3>
-
-                <p>
-                  Thuso highlights risk indicators so that job seekers can make
-                  safer decisions. A low-risk result is not a guarantee that an
-                  opportunity is legitimate.
-                </p>
-              </article>
-            </div>
-          </section>
-        )}
+    <div className="app thuso-shell">
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <Navbar activePage={activePage} onNavigate={navigate} />
+      <main id="main-content" tabIndex="-1" className={activePage === "verify" ? "page" : "home-page"}>
+        {activePage === "dashboard" && <Home onNavigate={navigate} />}
+        {["community", "info", "login", "signup"].includes(activePage) && <PlaceholderPage page={activePage} onNavigate={navigate} />}
 
         {activePage === "verify" && (
           <section>
@@ -251,10 +138,10 @@ function App() {
                 <label>
                   Job link
                   <input
-                    type="url"
+                    type="text"
                     value={jobUrl}
                     onChange={(event) => setJobUrl(event.target.value)}
-                    placeholder="https://example.com/job"
+                    placeholder="https://example.com/job or example.com/job"
                   />
                 </label>
 
@@ -337,6 +224,19 @@ function App() {
                       )}
                     </div>
 
+                    {result.recommendations?.length > 0 && (
+                      <div className="report-section">
+                        <h4>What to do next</h4>
+
+                        {result.recommendations.map((recommendation, index) => (
+                          <div className="signal success-signal" key={index}>
+                            <span>→</span>
+                            <p>{recommendation}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     {result.extracted.emails.length > 0 && (
                       <div className="report-section">
                         <h4>Contact found</h4>
@@ -345,6 +245,19 @@ function App() {
                           <div className="detail-row" key={email}>
                             <span>Email</span>
                             <strong>{email}</strong>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {result.extracted.phone_numbers?.length > 0 && (
+                      <div className="report-section">
+                        <h4>Phone number found</h4>
+
+                        {result.extracted.phone_numbers.map((phone) => (
+                          <div className="detail-row" key={phone}>
+                            <span>Phone</span>
+                            <strong>{phone}</strong>
                           </div>
                         ))}
                       </div>
@@ -378,257 +291,16 @@ function App() {
           </section>
         )}
 
-        {activePage === "journey" && (
-          <section>
-            <div className="hero">
-              <div>
-                <span className="eyebrow">SAFE JOURNEY</span>
-
-                <h2>Stay connected while attending your interview.</h2>
-
-                <p>
-                  Save the interview details, nominate a trusted contact and
-                  check in as your journey progresses.
-                </p>
-              </div>
-            </div>
-
-            <div className="journey-layout">
-              <article className="card">
-                <span className="card-label">INTERVIEW DETAILS</span>
-
-                <div className="form-grid">
-                  <label>
-                    Company
-                    <input
-                      value={interview.company}
-                      onChange={(event) =>
-                        setInterview({
-                          ...interview,
-                          company: event.target.value,
-                        })
-                      }
-                      placeholder="Company name"
-                    />
-                  </label>
-
-                  <label>
-                    Location
-                    <input
-                      value={interview.location}
-                      onChange={(event) =>
-                        setInterview({
-                          ...interview,
-                          location: event.target.value,
-                        })
-                      }
-                      placeholder="Sandton, Johannesburg"
-                    />
-                  </label>
-
-                  <label>
-                    Date
-                    <input
-                      type="date"
-                      value={interview.date}
-                      onChange={(event) =>
-                        setInterview({
-                          ...interview,
-                          date: event.target.value,
-                        })
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    Time
-                    <input
-                      type="time"
-                      value={interview.time}
-                      onChange={(event) =>
-                        setInterview({
-                          ...interview,
-                          time: event.target.value,
-                        })
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    Trusted contact
-                    <input
-                      value={interview.contactName}
-                      onChange={(event) =>
-                        setInterview({
-                          ...interview,
-                          contactName: event.target.value,
-                        })
-                      }
-                      placeholder="Contact name"
-                    />
-                  </label>
-
-                  <label>
-                    Contact number
-                    <input
-                      value={interview.contactPhone}
-                      onChange={(event) =>
-                        setInterview({
-                          ...interview,
-                          contactPhone: event.target.value,
-                        })
-                      }
-                      placeholder="082 000 0000"
-                    />
-                  </label>
-                </div>
-
-                {journeyStatus === "not-started" && (
-                  <button
-                    className="primary-button full-button"
-                    onClick={startJourney}
-                  >
-                    Start Safe Journey
-                  </button>
-                )}
-
-                {journeyStatus !== "not-started" && (
-                  <div className="journey-actions">
-                    <button
-                      className="secondary-button"
-                      onClick={markArrived}
-                    >
-                      I've arrived
-                    </button>
-
-                    <button className="safe-button" onClick={markSafe}>
-                      I'm safe
-                    </button>
-
-                    <button className="danger-button" onClick={triggerAlert}>
-                      I need help
-                    </button>
-                  </div>
-                )}
-              </article>
-
-              <article className="card">
-                <span className="card-label">LIVE SAFETY STATUS</span>
-
-                <div className="timeline">
-                  <div
-                    className={`timeline-item ${
-                      journeyStatus !== "not-started" ? "complete" : ""
-                    }`}
-                  >
-                    <div className="timeline-dot"></div>
-
-                    <div>
-                      <strong>Journey started</strong>
-                      <p>
-                        Location sharing begins only when the user chooses to
-                        start their safety journey.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`timeline-item ${
-                      ["arrived", "safe", "alert"].includes(journeyStatus)
-                        ? "complete"
-                        : ""
-                    }`}
-                  >
-                    <div className="timeline-dot"></div>
-
-                    <div>
-                      <strong>Interview arrival</strong>
-                      <p>User confirms they arrived at the interview.</p>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`timeline-item ${
-                      journeyStatus === "safe" ? "complete" : ""
-                    }`}
-                  >
-                    <div className="timeline-dot"></div>
-
-                    <div>
-                      <strong>Safety check-in</strong>
-                      <p>Thuso asks the user to confirm that they are safe.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {journeyStatus === "not-started" && (
-                  <div className="status-box neutral">
-                    Safe Journey has not started yet.
-                  </div>
-                )}
-
-                {journeyStatus === "travelling" && (
-                  <div className="status-box active">
-                    Journey active — waiting for arrival confirmation.
-                  </div>
-                )}
-
-                {journeyStatus === "arrived" && (
-                  <div className="status-box active">
-                    Arrival confirmed. Thuso will check in again after the
-                    interview.
-                  </div>
-                )}
-
-                {journeyStatus === "safe" && (
-                  <div className="status-box success">
-                    Safety confirmed. Trusted contact does not need to be
-                    alerted.
-                  </div>
-                )}
-
-                {journeyStatus === "alert" && (
-                  <div className="emergency-card">
-                    <span>TRUSTED CONTACT ALERT</span>
-
-                    <h3>Safety check requires attention</h3>
-
-                    <p>
-                      The job seeker requested help or missed their expected
-                      safety confirmation.
-                    </p>
-
-                    <div className="alert-details">
-                      <strong>
-                        {interview.company || "Interview company"}
-                      </strong>
-
-                      <span>
-                        {interview.location || "Interview location"}
-                      </span>
-
-                      <span>
-                        Trusted contact:{" "}
-                        {interview.contactName || "Emergency contact"}
-                      </span>
-                    </div>
-
-                    <p className="alert-note">
-                      Prototype: In production, Thuso would send this alert
-                      through an approved messaging or SMS provider.
-                    </p>
-                  </div>
-                )}
-              </article>
-            </div>
-          </section>
+        {["appointments", "journey"].includes(activePage) && (
+          <AppointmentsPage manager={appointments} initialDraft={appointmentDraft} onClearDraft={() => setAppointmentDraft(null)} />
         )}
       </main>
 
-      <footer>
-        <strong>Thuso</strong>
+      <footer className="site-footer">
+        <div><strong>thuso.</strong><span>Opportunity with peace of mind.</span></div>
         <span>Built for safer job seeking.</span>
       </footer>
+      <AssistantLauncher />
     </div>
   );
 }
