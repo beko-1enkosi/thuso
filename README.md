@@ -1,14 +1,14 @@
-🛡️ Thuso
+# 🛡️ Thuso
 
-Helping job seekers verify opportunities, prepare safely, and make informed decisions before attending interviews.
+### Helping job seekers verify opportunities, prepare safely, and make informed decisions before attending interviews.
 
-Thuso is a safety focused web application designed to help protect job seekers from fraudulent job advertisements, fake interviews, recruitment scams, kidnapping risks, and other dangers associated with unverified employment opportunities.
+**Thuso** is a safety focused web application designed to help protect job seekers from fraudulent job advertisements, fake interviews, recruitment scams, kidnapping risks, and other dangers associated with unverified employment opportunities.
 
-The project was developed by The Smurfs under VeriSafe during the Cisco WISE × WeThinkCode_ She Builds Hackathon 2026, where it placed 3rd.
+The project was developed by **The Smurfs** under **VeriSafe** during the **Cisco WISE × WeThinkCode_ She Builds Hackathon 2026**, where it placed **3rd**.
 
-⸻
+---
 
-🌍 The Problem
+## 🌍 The Problem
 
 Finding employment can already be stressful, especially in communities where opportunities are limited and competition is high.
 
@@ -20,17 +20,17 @@ In more serious cases, fake job opportunities can expose people to kidnapping, t
 
 For someone urgently looking for work, distinguishing between a legitimate opportunity and a dangerous one is not always easy.
 
-Thuso was created to give job seekers a moment to verify before they go.
+**Thuso was created to give job seekers a moment to verify before they go.**
 
-⸻
+---
 
-💡 Our Solution
+## 💡 Our Solution
 
 Thuso provides job seekers with a simple platform where they can review an opportunity, access safety information, prepare for an interview, and find trusted information before travelling to an unfamiliar location.
 
 The goal is not to replace recruitment platforms.
 
-Instead, Thuso acts as an additional safety layer between receiving an opportunity and physically attending it.
+Instead, Thuso acts as an additional **safety layer between receiving an opportunity and physically attending it**.
 
 The platform encourages users to:
 
@@ -42,13 +42,13 @@ The platform encourages users to:
 * Know what to do when they encounter a suspicious job offer
 * Find useful contact and location information
 
-⸻
+---
 
-✨ Core Features
+# ✨ Core Features
 
-🔎 Verify a Job
+## 🔎 Verify a Job
 
-The Verify Job page allows users to examine the information surrounding a job opportunity before deciding whether to proceed.
+The **Verify Job** page allows users to examine the information surrounding a job opportunity before deciding whether to proceed.
 
 The feature is designed around checking important indicators such as:
 
@@ -63,9 +63,9 @@ The feature is designed around checking important indicators such as:
 
 The long term vision is to combine several verification signals into an easy to understand risk assessment that helps users make more informed decisions.
 
-⸻
+---
 
-📅 Appointments
+## 📅 Appointments
 
 Users can access an appointments section designed around keeping interview related information organised.
 
@@ -78,11 +78,11 @@ This creates a foundation for future functionality such as:
 * Interview reminders
 * Safety check ins
 
-⸻
+---
 
-🧭 Location Awareness
+## 🧭 Location Awareness
 
-Thuso incorporates Cisco technology and location based information to strengthen the safety experience.
+Thuso incorporates **Cisco technology and location based information** to strengthen the safety experience.
 
 Location awareness can help job seekers understand where an interview is taking place and encourage them to verify unfamiliar destinations before travelling.
 
@@ -96,13 +96,13 @@ Future versions of Thuso can expand this functionality to include:
 * Emergency services
 * Route sharing with trusted contacts
 
-⸻
+---
 
-📚 Safety & Information Hub
+## 📚 Safety & Information Hub
 
-The Info page provides practical guidance users can apply before, during, and after the recruitment process.
+The **Info** page provides practical guidance users can apply before, during, and after the recruitment process.
 
-Interview preparation
+### Interview preparation
 
 Users are encouraged to:
 
@@ -110,10 +110,10 @@ Users are encouraged to:
 * Confirm the role they applied for
 * Prepare common interview questions
 * Carry the necessary documents
-* Confirm the interviewer’s name
-* Verify the company’s contact information
+* Confirm the interviewer's name
+* Verify the company's contact information
 
-Personal safety
+### Personal safety
 
 Before leaving for an interview, users are encouraged to:
 
@@ -124,7 +124,7 @@ Before leaving for an interview, users are encouraged to:
 * Avoid handing over original identity documents
 * Be cautious when asked to meet in unusual or isolated locations
 
-Scam awareness
+### Scam awareness
 
 The platform highlights common warning signs such as:
 
@@ -137,17 +137,17 @@ The platform highlights common warning signs such as:
 * Requests for unnecessary personal information
 * Interview locations that do not match the company
 
-Responding to suspicious opportunities
+### Responding to suspicious opportunities
 
 Thuso also helps users understand how to respond when they believe an opportunity may be fraudulent.
 
 Users are encouraged not to send money, documents, banking details, passwords, OTPs, or other sensitive information.
 
-⸻
+---
 
-👥 Community
+## 👥 Community
 
-The Community section creates a foundation for collective scam awareness.
+The **Community** section creates a foundation for collective scam awareness.
 
 The idea is that job seekers should not have to identify dangerous opportunities alone.
 
@@ -161,41 +161,41 @@ Future community functionality could allow users to:
 
 Over time, community contributed information could become an important source of intelligence for recognising recruitment scams.
 
-⸻
+---
 
-🧠 How Thuso Works
+# 🧠 How Thuso Works
 
 A typical user journey looks like this:
 
-1. Receive an opportunity
+### 1. Receive an opportunity
 
 A job seeker receives an interview invitation through WhatsApp, email, social media, a recruitment site, or another channel.
 
-2. Open Thuso
+### 2. Open Thuso
 
 Instead of immediately travelling to the interview, the user first opens Thuso.
 
-3. Review the opportunity
+### 3. Review the opportunity
 
 The user checks details such as the company, recruiter, location, communication method, and any suspicious requests.
 
-4. Review safety information
+### 4. Review safety information
 
 The user can access interview preparation tips, scam warning signs, and personal safety precautions.
 
-5. Make an informed decision
+### 5. Make an informed decision
 
 Thuso provides information that helps the user decide what additional verification may be necessary before proceeding.
 
 The core principle is simple:
 
-Verify before you go.
+> **Verify before you go.**
 
-⸻
+---
 
-🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-Frontend
+## Frontend
 
 * React
 * Vite
@@ -205,26 +205,27 @@ Frontend
 * ESLint
 * Prettier
 
-Backend
+## Backend
 
 * Python
 * REST API architecture
 * CORS configuration
 
-Integrations
+## Integrations
 
 * Cisco API integration
 * Location based services
 
-Deployment
+## Deployment
 
 * Vercel
 * GitHub
 
-⸻
+---
 
-🏗️ Project Architecture
+# 🏗️ Project Architecture
 
+```text
 thuso/
 │
 ├── backend/
@@ -246,14 +247,15 @@ thuso/
 ├── .gitignore
 ├── README.md
 └── ...
+```
 
 The project separates the user interface from backend services, making it easier to extend each part of the platform independently.
 
-⸻
+---
 
-🚀 Running Thuso Locally
+# 🚀 Running Thuso Locally
 
-Prerequisites
+## Prerequisites
 
 Ensure you have the following installed:
 
@@ -262,54 +264,66 @@ Ensure you have the following installed:
 * npm
 * Git
 
-⸻
+---
 
-1. Clone the repository
+## 1. Clone the repository
 
+```bash
 git clone https://github.com/beko-1enkosi/thuso.git
 cd thuso
+```
 
-⸻
+---
 
-2. Set up the backend
+## 2. Set up the backend
 
 Create a virtual environment:
 
-Linux / macOS
+### Linux / macOS
 
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
-Windows PowerShell
+### Windows PowerShell
 
+```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
 
 Install the Python dependencies:
 
+```bash
 pip install -r backend/requirements.txt
+```
 
 Run the backend:
 
+```bash
 python backend/main.py
+```
 
-⸻
+---
 
-3. Set up the frontend
+## 3. Set up the frontend
 
 Open another terminal:
 
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
 Vite will display the local development address in your terminal.
 
 Open that address in your browser to use Thuso locally.
 
-⸻
+---
 
-🔐 Safety and Privacy Philosophy
+# 🔐 Safety and Privacy Philosophy
 
 Thuso is being designed around a safety first approach.
 
@@ -335,11 +349,11 @@ Because this information can be sensitive, future development should prioritise:
 
 Thuso should collect only the information necessary to provide its service.
 
-⸻
+---
 
-🤖 Future AI Integration
+# 🤖 Future AI Integration
 
-Artificial intelligence could eventually strengthen Thuso’s verification process.
+Artificial intelligence could eventually strengthen Thuso's verification process.
 
 Potential AI functionality includes analysing:
 
@@ -351,24 +365,28 @@ Potential AI functionality includes analysing:
 * Previously reported incidents
 * Common social engineering techniques
 
-Instead of allowing AI to make an absolute decision about whether a job is legitimate, the system could identify risk indicators and explain why something deserves further verification.
+Instead of allowing AI to make an absolute decision about whether a job is legitimate, the system could identify **risk indicators** and explain why something deserves further verification.
 
 For example:
 
+```text
 Potential Risk Indicators
+
 ⚠ Recruiter is using an unofficial email address
 ⚠ Interview location could not be associated with the stated company
 ⚠ Payment was requested before employment
 ⚠ Message contains urgency commonly associated with recruitment scams
+```
 
 The final decision should remain with the user.
 
-⸻
+---
 
-🗄️ Future Database Architecture
+# 🗄️ Future Database Architecture
 
 As the platform grows, a database could store structured information such as:
 
+```text
 Users
 Companies
 Recruiters
@@ -378,12 +396,13 @@ Scam Reports
 Verification Requests
 Locations
 Community Reports
+```
 
 This would allow Thuso to build a searchable history of reported opportunities and recognise repeated scam patterns.
 
-⸻
+---
 
-🔮 What’s Next?
+# 🔮 What's Next?
 
 Thuso began as a hackathon MVP, but the concept can grow significantly.
 
@@ -407,29 +426,29 @@ Future development may include:
 
 The broader vision is to create a trusted digital safety companion for people navigating employment opportunities.
 
-⸻
+---
 
-💼 Business Vision
+# 💼 Business Vision
 
-Thuso forms part of the broader VeriSafe concept.
+Thuso forms part of the broader **VeriSafe** concept.
 
 The business vision is to build a verification and safety ecosystem connecting:
 
-Job seekers
+**Job seekers**
 
 with
 
-Employers
+**Employers**
 
-Recruitment agencies
+**Recruitment agencies**
 
-Employment platforms
+**Employment platforms**
 
-Safety services
+**Safety services**
 
 and
 
-trusted verification data.
+**trusted verification data.**
 
 Potential future revenue models could include:
 
@@ -443,76 +462,76 @@ Potential future revenue models could include:
 
 The core job seeker safety functionality should remain accessible to the people who need it most.
 
-⸻
+---
 
-🏆 She Builds Hackathon 2026
+# 🏆 She Builds Hackathon 2026
 
-Thuso was developed during the Cisco WISE × WeThinkCode_ She Builds Hackathon.
+Thuso was developed during the **Cisco WISE × WeThinkCode_ She Builds Hackathon**.
 
-Team
+### Team
 
-The Smurfs
+**The Smurfs**
 
-Company
+### Company
 
-VeriSafe
+**VeriSafe**
 
-Project
+### Project
 
-Thuso
+**Thuso**
 
-Achievement
+### Achievement
 
-🥉 3rd Place
+🥉 **3rd Place**
 
 The hackathon challenged participants to identify meaningful problems and use technology to develop practical solutions.
 
 Our team focused on the risks faced by people searching for employment and explored how technology, verification, location awareness, community knowledge, and education could work together to make the job seeking process safer.
 
-⸻
+---
 
-💙 Why the Name “Thuso”?
+# 💙 Why the Name “Thuso”?
 
-Thuso means help or assistance in Sesotho and Setswana.
+**Thuso** means **help or assistance** in Sesotho and Setswana.
 
 The name reflects the purpose of the platform.
 
 Thuso does not make decisions for job seekers.
 
-It gives them information, tools, and guidance that can help them make safer decisions for themselves.
+It gives them information, tools, and guidance that can **help them make safer decisions for themselves.**
 
-⸻
+---
 
-🌱 Our Mission
+# 🌱 Our Mission
 
 To make seeking employment safer by giving job seekers access to verification tools, safety information, and trusted resources before they place themselves at risk.
 
-⸻
+---
 
-🌍 Our Vision
+# 🌍 Our Vision
 
 A future where nobody has to choose between pursuing an opportunity and protecting their safety.
 
-⸻
+---
 
-💬 Final Thought
+## 💬 Final Thought
 
-A job opportunity should be the beginning of someone’s next chapter.
+A job opportunity should be the beginning of someone's next chapter.
 
-It should never put their life at risk.
+**It should never put their life at risk.**
 
-Thuso
+### Thuso
 
-Verify. Prepare. Stay safe.
+**Verify. Prepare. Stay safe.**
 
-⸻
+---
 
-👩🏾‍💻 Built By
+## 👩🏾‍💻 Built By
 
-The Smurfs
+**The Smurfs**
 
-Developed during the 2026 She Builds Hackathon with support from Cisco WISE and WeThinkCode_.
+Developed during the **2026 She Builds Hackathon** with support from **Cisco WISE** and **WeThinkCode_**.
 
-⸻
+---
 
 ⭐ If you believe technology can help make job seeking safer, consider starring the repository.
